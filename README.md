@@ -19,6 +19,23 @@ This repository ships with an `XcodeGen` spec so the project can be generated co
 3. Open the generated `Sonarus.xcodeproj` in Xcode.
 4. Build and run the `Sonarus` scheme.
 
+## Testing
+
+The repository currently has two automated layers:
+
+1. **`swift test`** for `SonarusCore` storage, model-management, keyboard-bridge, permissions, and transcription stub coverage.
+2. **Xcode/XcodeGen-based app tests** for `AppState` and the SwiftUI shell scaffolding.
+
+Typical commands on macOS:
+
+```bash
+swift test
+xcodegen generate
+xcodebuild -project Sonarus.xcodeproj -scheme Sonarus -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' build-for-testing
+```
+
+Release verification guidance for permissions, offline behavior, history correctness, settings persistence, model lifecycle, and keyboard-critical paths lives in `docs/release-verification-checklist.md`.
+
 ## Product direction
 
 The initial shell focuses on three tabs:
