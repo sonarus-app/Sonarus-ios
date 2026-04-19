@@ -1,0 +1,42 @@
+name: Sonarus CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  sonarus-core-tests:
+    name: SonarusCore package tests
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run Swift package tests
+        run: swift test --parallel
+
+  ios-shell-build:
+    name: iOS shell build-for-testing
+    runs-on: macos-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build Sonarus scheme for testing
+        run: |
+          xcodebuild \
+            -project Sonarus.xcodeproj \
+            -scheme Sonarus \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            build-for-testing
